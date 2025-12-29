@@ -109,45 +109,51 @@ async function generatePDF() {
 
     // Create PDF from canvas
     const { jsPDF } = window.jspdf;
-
-    // Use JPEG instead of PNG for smaller file size
-    const imgData = canvas.toDataURL('image/jpeg', 0.7); // 0.7 quality = good balance
     const doc = new jsPDF('p', 'mm', 'a4');
 
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
-
-    // Calculate dimensions to fit the page
-    const imgWidth = pageWidth - 20; // 10mm margin on each side
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
     const margin = 10;
-    const usablePageHeight = pageHeight - (2 * margin);
 
-    let yOffset = 0;
+    // Calculate scaling
+    const pdfWidth = pageWidth - (2 * margin);
+    const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+    const pageContentHeight = pageHeight - (2 * margin);
 
-    // Add pages
-    while (yOffset < imgHeight) {
-        if (yOffset > 0) {
+    // Calculate how many pages we need
+    const pageCount = Math.ceil(pdfHeight / pageContentHeight);
+
+    // Split canvas into chunks and add each to a page
+    for (let i = 0; i < pageCount; i++) {
+        if (i > 0) {
             doc.addPage();
         }
 
-        const sourceY = yOffset;
-        const sourceHeight = Math.min(usablePageHeight, imgHeight - yOffset);
+        // Calculate which part of the canvas to show
+        const sourceY = (i * pageContentHeight * canvas.width) / pdfWidth;
+        const sourceHeight = (pageContentHeight * canvas.width) / pdfWidth;
 
-        // Use cropping to show only the portion that fits on this page
-        doc.addImage(
-            imgData,
-            'JPEG',
-            margin,
-            margin - yOffset,
-            imgWidth,
-            imgHeight,
-            undefined,
-            'FAST'
+        // Create a temporary canvas for this page section
+        const tempCanvas = document.createElement('canvas');
+        const tempCtx = tempCanvas.getContext('2d');
+
+        tempCanvas.width = canvas.width;
+        tempCanvas.height = Math.min(sourceHeight, canvas.height - sourceY);
+
+        // Draw the section of the original canvas
+        tempCtx.drawImage(
+            canvas,
+            0, sourceY,
+            canvas.width, tempCanvas.height,
+            0, 0,
+            canvas.width, tempCanvas.height
         );
 
-        yOffset += usablePageHeight;
+        // Convert to image and add to PDF
+        const pageImgData = tempCanvas.toDataURL('image/jpeg', 0.7);
+        const imgHeight = (tempCanvas.height * pdfWidth) / canvas.width;
+
+        doc.addImage(pageImgData, 'JPEG', margin, margin, pdfWidth, imgHeight, undefined, 'FAST');
     }
 
     return doc.output('blob');
