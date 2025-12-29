@@ -26,10 +26,23 @@ export default async function handler(req, res) {
       });
     });
 
-    const pdfFile = files.pdf;
+    // Handle both array and single file formats
+    let pdfFile = files.pdf;
+    if (Array.isArray(pdfFile)) {
+      pdfFile = pdfFile[0];
+    }
 
     if (!pdfFile) {
       return res.status(400).json({ error: 'No PDF file provided' });
+    }
+
+    // Verify environment variables are set
+    if (!process.env.GOOGLE_CLIENT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+      console.error('Missing Google credentials');
+      return res.status(500).json({
+        error: 'Server configuration error: Missing Google Drive credentials',
+        details: 'Please configure GOOGLE_CLIENT_EMAIL and GOOGLE_PRIVATE_KEY in Vercel environment variables'
+      });
     }
 
     // Set up Google Drive API authentication
@@ -44,13 +57,17 @@ export default async function handler(req, res) {
     const drive = google.drive({ version: 'v3', auth });
 
     // Read the file
-    const fileBuffer = fs.readFileSync(pdfFile[0].filepath);
+    const fileBuffer = fs.readFileSync(pdfFile.filepath);
 
     // Upload to Google Drive
     const fileMetadata = {
-      name: pdfFile[0].originalFilename || 'contract_submission.pdf',
-      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID], // Optional: specify folder ID
+      name: pdfFile.originalFilename || 'contract_submission.pdf',
     };
+
+    // Only add parents if folder ID is provided
+    if (process.env.GOOGLE_DRIVE_FOLDER_ID) {
+      fileMetadata.parents = [process.env.GOOGLE_DRIVE_FOLDER_ID];
+    }
 
     const media = {
       mimeType: 'application/pdf',
@@ -64,7 +81,12 @@ export default async function handler(req, res) {
     });
 
     // Clean up temporary file
-    fs.unlinkSync(pdfFile[0].filepath);
+    try {
+      fs.unlinkSync(pdfFile.filepath);
+    } catch (cleanupError) {
+      console.error('Error cleaning up temp file:', cleanupError);
+      // Don't fail the request if cleanup fails
+    }
 
     return res.status(200).json({
       success: true,
@@ -79,6 +101,7 @@ export default async function handler(req, res) {
     return res.status(500).json({
       error: 'Failed to upload file to Google Drive',
       details: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
 }
