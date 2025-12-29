@@ -26,7 +26,22 @@ document.getElementById('submissionForm').addEventListener('submit', async funct
             body: formData
         });
 
-        const result = await response.json();
+        // Debug: Check response content type
+        const contentType = response.headers.get('content-type');
+        console.log('Response content-type:', contentType);
+
+        // Try to get the response text first
+        const responseText = await response.text();
+        console.log('Response text:', responseText);
+
+        // Try to parse as JSON
+        let result;
+        try {
+            result = JSON.parse(responseText);
+        } catch (parseError) {
+            console.error('JSON parse error:', parseError);
+            throw new Error(`Server returned non-JSON response: ${responseText.substring(0, 200)}`);
+        }
 
         if (response.ok) {
             statusMessage.className = 'status-message success';
