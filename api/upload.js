@@ -1,5 +1,5 @@
 const { google } = require('googleapis');
-const formidable = require('formidable');
+const { IncomingForm } = require('formidable');
 const fs = require('fs');
 
 export const config = {
@@ -15,7 +15,7 @@ export default async function handler(req, res) {
 
   try {
     // Parse the multipart form data
-    const form = formidable({
+    const form = new IncomingForm({
       maxFileSize: 10 * 1024 * 1024, // 10MB
     });
 
