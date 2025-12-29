@@ -1,0 +1,23 @@
+{
+  "name": "brickface-contract-submission",
+  "version": "1.0.0",
+  "description": "Garden State BrickFace Contract Submission Form with Google Drive Integration",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Build complete'",
+    "deploy": "vercel --prod"
+  },
+  "dependencies": {
+    "googleapis": "^126.0.0",
+    "formidable": "^3.5.1"
+  },
+  "keywords": [
+    "contract",
+    "form",
+    "pdf",
+    "google-drive"
+  ],
+  "author": "",
+  "license": "MIT"
+}

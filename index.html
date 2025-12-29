@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden State BrickFace Contract Submission Sheet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>GARDEN STATE BRICKFACE CONTRACT SUBMISSION SHEET</h1>
+
+        <form id="submissionForm">
+            <!-- Header Section -->
+            <div class="header-section">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="dateOfSale">Date of Sale:</label>
+                        <input type="date" id="dateOfSale" name="dateOfSale" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="dateSubmitted">Date Submitted to Office:</label>
+                        <input type="date" id="dateSubmitted" name="dateSubmitted" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label for="salesRepName">Sales Rep Last Name:</label>
+                        <input type="text" id="salesRepName" name="salesRepName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Project Type:</label>
+                        <div class="checkbox-group">
+                            <label>
+                                <input type="radio" name="projectType" value="Residential" required>
+                                Residential
+                            </label>
+                            <label>
+                                <input type="radio" name="projectType" value="Commercial">
+                                Commercial
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contract Information Section -->
+            <div class="contract-info-section">
+                <h2>Contract Information</h2>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="signedContractY" name="signedContract" value="Y" required>
+                        <label for="signedContractY">Y</label>
+                        <input type="radio" id="signedContractN" name="signedContract" value="N">
+                        <label for="signedContractN">N</label>
+                    </div>
+                    <span>Signed Contract</span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="signedAckY" name="signedAck" value="Y" required>
+                        <label for="signedAckY">Y</label>
+                        <input type="radio" id="signedAckN" name="signedAck" value="N">
+                        <label for="signedAckN">N</label>
+                    </div>
+                    <span>Signed Acknowledgement Form</span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="measurementY" name="measurement" value="Y" required>
+                        <label for="measurementY">Y</label>
+                        <input type="radio" id="measurementN" name="measurement" value="N">
+                        <label for="measurementN">N</label>
+                    </div>
+                    <span>Measurement Worksheets and Price Breakdown Sheets</span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="paymentScheduleY" name="paymentSchedule" value="Y" required>
+                        <label for="paymentScheduleY">Y</label>
+                        <input type="radio" id="paymentScheduleN" name="paymentSchedule" value="N">
+                        <label for="paymentScheduleN">N</label>
+                    </div>
+                    <span>Payment Schedule Breakdown is Correct <span class="red-text">(Cannot hand in contract if not)</span></span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="paymentTypeY" name="paymentType" value="Y" required>
+                        <label for="paymentTypeY">Y</label>
+                        <input type="radio" id="paymentTypeN" name="paymentType" value="N">
+                        <label for="paymentTypeN">N</label>
+                    </div>
+                    <span>Payment Type (Circle One):
+                        <label class="inline-checkbox">
+                            <input type="checkbox" name="paymentMethod" value="Credit Card"> Credit Card
+                        </label>
+                        <label class="inline-checkbox">
+                            <input type="checkbox" name="paymentMethod" value="Check"> Check
+                        </label>
+                        <label class="inline-checkbox">
+                            <input type="checkbox" name="paymentMethod" value="Financing"> Financing
+                        </label>
+                    </span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="workReadyY" name="workReady" value="Y" required>
+                        <label for="workReadyY">Y</label>
+                        <input type="radio" id="workReadyN" name="workReady" value="N">
+                        <label for="workReadyN">N</label>
+                    </div>
+                    <span>Is the work ready to go? (If not, specify when here):
+                        <input type="text" id="workReadyNote" name="workReadyNote" class="inline-input">
+                    </span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="clearPhotosY" name="clearPhotos" value="Y" required>
+                        <label for="clearPhotosY">Y</label>
+                        <input type="radio" id="clearPhotosN" name="clearPhotos" value="N">
+                        <label for="clearPhotosN">N</label>
+                    </div>
+                    <span>Clear photos of "all" elevations where work being performed</span>
+                </div>
+
+                <div class="checklist-item">
+                    <div class="yn-buttons">
+                        <input type="radio" id="allColorsY" name="allColors" value="Y" required>
+                        <label for="allColorsY">Y</label>
+                        <input type="radio" id="allColorsN" name="allColors" value="N">
+                        <label for="allColorsN">N</label>
+                    </div>
+                    <span>All colors chosen by customer and noted on contract <span class="yellow-highlight">(LIST ALL COLORS BELOW FOR EACH PRODUCT)</span></span>
+                </div>
+
+                <!-- Color and Product Type Section -->
+                <div class="color-products-section">
+                    <div class="color-product-box">
+                        <div class="box-header">Color and Product Type</div>
+                        <textarea name="colorProduct1" rows="4"></textarea>
+                    </div>
+                    <div class="color-product-box">
+                        <div class="box-header">Color and Product Type</div>
+                        <textarea name="colorProduct2" rows="4"></textarea>
+                    </div>
+                    <div class="color-product-box">
+                        <div class="box-header">Color and Product Type</div>
+                        <textarea name="colorProduct3" rows="4"></textarea>
+                    </div>
+                    <div class="color-product-box">
+                        <div class="box-header">Color and Product Type</div>
+                        <textarea name="colorProduct4" rows="4"></textarea>
+                    </div>
+                    <div class="color-product-box">
+                        <div class="box-header">Color and Product Type</div>
+                        <textarea name="colorProduct5" rows="4"></textarea>
+                    </div>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="specialNotes">Special Production Notes (if Any):</label>
+                    <textarea id="specialNotes" name="specialNotes" rows="2"></textarea>
+                </div>
+            </div>
+
+            <!-- Job Cost Breakdown Section -->
+            <div class="job-cost-section">
+                <h2>Job Cost Breakdown Section</h2>
+
+                <div class="cost-grid">
+                    <div class="cost-row">
+                        <label for="brickfaceStucco">Brickface and Stucco</label>
+                        <input type="text" id="brickfaceStucco" name="brickfaceStucco" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="housePainting">House Painting</label>
+                        <input type="text" id="housePainting" name="housePainting" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="vinylSiding">Vinyl Siding</label>
+                        <input type="text" id="vinylSiding" name="vinylSiding" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="windows">Windows</label>
+                        <input type="text" id="windows" name="windows" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="stoneVeneer">Stone Veneer</label>
+                        <input type="text" id="stoneVeneer" name="stoneVeneer" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="roofing">Roofing</label>
+                        <input type="text" id="roofing" name="roofing" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="stuccoPainting">Stucco Painting</label>
+                        <input type="text" id="stuccoPainting" name="stuccoPainting" placeholder="$">
+                    </div>
+                    <div class="cost-row">
+                        <label for="guttersLeaders">Gutters and Leaders</label>
+                        <input type="text" id="guttersLeaders" name="guttersLeaders" placeholder="$">
+                    </div>
+                </div>
+
+                <div class="total-section">
+                    <label for="totalContract">Total Contract Amount</label>
+                    <input type="text" id="totalContract" name="totalContract" placeholder="$" required>
+                </div>
+            </div>
+
+            <!-- Office Only Section -->
+            <div class="office-section">
+                <h2>Office Only</h2>
+
+                <div class="office-checklist">
+                    <div class="office-item">
+                        <span class="office-label">Entered into HouzPro</span>
+                        <div class="office-options">
+                            <label><input type="radio" name="enteredHouzPro" value="Yes"> Yes</label>
+                            <label><input type="radio" name="enteredHouzPro" value="No"> No</label>
+                        </div>
+                    </div>
+
+                    <div class="office-item">
+                        <span class="office-label">Entered Commission (Excel)</span>
+                        <div class="office-options">
+                            <label><input type="radio" name="enteredCommission" value="Yes"> Yes</label>
+                            <label><input type="radio" name="enteredCommission" value="No"> No</label>
+                        </div>
+                    </div>
+
+                    <div class="office-item">
+                        <span class="office-label">Entered Product Type and Work Area HouzPro</span>
+                        <div class="office-options">
+                            <label><input type="radio" name="enteredProductType" value="Yes"> Yes</label>
+                            <label><input type="radio" name="enteredProductType" value="No"> No</label>
+                        </div>
+                    </div>
+
+                    <div class="office-item">
+                        <span class="office-label">Entered into Sales Statistics (Excel)</span>
+                        <div class="office-options">
+                            <label><input type="radio" name="enteredSalesStats" value="Yes"> Yes</label>
+                            <label><input type="radio" name="enteredSalesStats" value="No"> No</label>
+                        </div>
+                    </div>
+
+                    <div class="office-item">
+                        <span class="office-label">Split Payment Transaction (If Yes, see below)</span>
+                        <div class="office-options">
+                            <label><input type="radio" name="splitPayment" value="Yes"> Yes</label>
+                            <label><input type="radio" name="splitPayment" value="No"> No</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-breakdown">
+                    <div class="payment-row">
+                        <label for="checkAmount">Check</label>
+                        <input type="text" id="checkAmount" name="checkAmount" placeholder="$">
+                    </div>
+                    <div class="payment-row">
+                        <label for="creditCardAmount">Credit Card</label>
+                        <input type="text" id="creditCardAmount" name="creditCardAmount" placeholder="$">
+                    </div>
+                    <div class="payment-row">
+                        <label for="greenskyAmount">Greensky</label>
+                        <input type="text" id="greenskyAmount" name="greenskyAmount" placeholder="$">
+                    </div>
+                    <div class="payment-row">
+                        <label for="aquaAmount">Aqua</label>
+                        <input type="text" id="aquaAmount" name="aquaAmount" placeholder="$">
+                    </div>
+                </div>
+
+                <div class="merchant-info">
+                    <div class="merchant-row">
+                        <label>Greensky | Aqua</label>
+                        <label for="planNumber">Plan #</label>
+                        <input type="text" id="planNumber" name="planNumber">
+                    </div>
+                    <div class="merchant-row">
+                        <label for="merchantFee">Merchant Fee</label>
+                        <input type="text" id="merchantFee" name="merchantFee" placeholder="%">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="submit-section">
+                <button type="submit" class="submit-btn">Generate PDF and Submit to Google Drive</button>
+                <div id="statusMessage" class="status-message"></div>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
