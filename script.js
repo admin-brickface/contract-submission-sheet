@@ -92,7 +92,7 @@ async function generatePDF() {
     // Use html2canvas to capture the form
     const formElement = document.getElementById('submissionForm');
     const canvas = await html2canvas(formElement, {
-        scale: 2, // Higher quality
+        scale: 1, // Reduced from 2 to lower file size
         useCORS: true,
         logging: false,
         windowWidth: 900,
@@ -109,7 +109,9 @@ async function generatePDF() {
 
     // Create PDF from canvas
     const { jsPDF } = window.jspdf;
-    const imgData = canvas.toDataURL('image/png');
+
+    // Use JPEG instead of PNG for smaller file size
+    const imgData = canvas.toDataURL('image/jpeg', 0.7); // 0.7 quality = good balance
     const doc = new jsPDF('p', 'mm', 'a4');
 
     const pageWidth = doc.internal.pageSize.getWidth();
@@ -123,14 +125,14 @@ async function generatePDF() {
     let position = 10; // 10mm top margin
 
     // Add first page
-    doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+    doc.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight, undefined, 'FAST');
     heightLeft -= (pageHeight - 20); // Account for margins
 
     // Add more pages if content exceeds one page
     while (heightLeft > 0) {
         position = heightLeft - imgHeight + 10; // 10mm top margin for new page
         doc.addPage();
-        doc.addImage(imgData, 'PNG', 10, position, imgWidth, imgHeight);
+        doc.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight, undefined, 'FAST');
         heightLeft -= (pageHeight - 20);
     }
 
