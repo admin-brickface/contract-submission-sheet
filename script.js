@@ -40,13 +40,15 @@ document.getElementById('submissionForm').addEventListener('submit', async funct
                 }
             }, 2000);
         } else {
-            throw new Error(result.error || 'Upload failed');
+            // Show detailed error message
+            const errorMsg = result.details ? `${result.error}: ${result.details}` : result.error;
+            throw new Error(errorMsg || 'Upload failed');
         }
 
     } catch (error) {
         console.error('Error:', error);
         statusMessage.className = 'status-message error';
-        statusMessage.textContent = `Error: ${error.message}. Please try again.`;
+        statusMessage.textContent = `Error: ${error.message}`;
     } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = 'Generate PDF and Submit to Google Drive';
