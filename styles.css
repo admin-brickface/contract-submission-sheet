@@ -411,12 +411,32 @@ h2 {
     font-weight: 600;
 }
 
-.merchant-row input {
+.merchant-row .input-wrapper {
+    position: relative;
     flex: 1;
+}
+
+.merchant-row .input-wrapper.percent::after {
+    content: '%';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #333;
+    font-weight: 600;
+}
+
+.merchant-row input {
+    width: 100%;
     padding: 6px 10px;
     border: 1px solid #333;
     border-radius: 4px;
     font-size: 13px;
+}
+
+.merchant-row .input-wrapper.percent input {
+    padding-right: 25px;
 }
 
 .submit-section {
