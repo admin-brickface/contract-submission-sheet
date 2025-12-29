@@ -54,6 +54,17 @@ module.exports = async function handler(req, res) {
       refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
 
+    // Test authentication before proceeding
+    try {
+      await oauth2Client.getAccessToken();
+    } catch (authError) {
+      console.error('Authentication error:', authError);
+      return res.status(500).json({
+        error: 'Google Drive authentication failed',
+        details: 'Your refresh token may have expired. Please regenerate it using the OAuth Playground and update the GOOGLE_REFRESH_TOKEN environment variable in Vercel.'
+      });
+    }
+
     const drive = google.drive({ version: 'v3', auth: oauth2Client });
 
     // Read the file
