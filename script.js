@@ -138,11 +138,13 @@ async function generatePDF() {
 
 function generateFileName() {
     const formData = new FormData(document.getElementById('submissionForm'));
-    const salesRep = formData.get('salesRepName') || 'Unknown';
+    const customerName = formData.get('customerName') || 'Unknown';
     const date = formData.get('dateOfSale') || new Date().toISOString().split('T')[0];
-    const timestamp = new Date().getTime();
 
-    return `BrickFace_Contract_${salesRep}_${date}_${timestamp}.pdf`;
+    // Replace spaces with underscores and remove special characters
+    const sanitizedName = customerName.replace(/[^a-zA-Z0-9]/g, '_');
+
+    return `BrickFace_Contract_${sanitizedName}_${date}.pdf`;
 }
 
 // Auto-calculate total when cost fields change
