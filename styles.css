@@ -226,9 +226,25 @@ h2 {
     font-weight: 600;
 }
 
-.cost-row input {
+.cost-row .input-wrapper {
+    position: relative;
     width: 150px;
-    padding: 6px 10px;
+}
+
+.cost-row .input-wrapper::before {
+    content: '$';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #333;
+    font-weight: 600;
+}
+
+.cost-row input {
+    width: 100%;
+    padding: 6px 10px 6px 20px;
     border: 1px solid #333;
     border-radius: 4px;
     font-size: 13px;
@@ -249,9 +265,25 @@ h2 {
     font-weight: bold;
 }
 
-.total-section input {
+.total-section .input-wrapper {
+    position: relative;
     width: 200px;
-    padding: 8px 12px;
+}
+
+.total-section .input-wrapper::before {
+    content: '$';
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 14px;
+    color: #333;
+    font-weight: bold;
+}
+
+.total-section input {
+    width: 100%;
+    padding: 8px 12px 8px 24px;
     border: 2px solid #333;
     border-radius: 4px;
     font-size: 14px;
@@ -316,12 +348,47 @@ h2 {
     min-width: 100px;
 }
 
-.payment-row input {
+.payment-row .input-wrapper {
+    position: relative;
     flex: 1;
-    padding: 6px 10px;
+}
+
+.payment-row .input-wrapper::before {
+    content: '$';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #333;
+    font-weight: 600;
+}
+
+.payment-row .input-wrapper.percent::before {
+    content: '';
+}
+
+.payment-row .input-wrapper.percent::after {
+    content: '%';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 13px;
+    color: #333;
+    font-weight: 600;
+}
+
+.payment-row input {
+    width: 100%;
+    padding: 6px 20px 6px 20px;
     border: 1px solid #333;
     border-radius: 4px;
     font-size: 13px;
+}
+
+.payment-row .input-wrapper.percent input {
+    padding-right: 25px;
 }
 
 .merchant-info {
