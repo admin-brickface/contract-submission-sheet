@@ -1,14 +1,12 @@
-aconst { google } = require('googleapis');
+const { google } = require('googleapis');
 const { IncomingForm } = require('formidable');
 const fs = require('fs');
+const stream = require('stream');
 
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+module.exports = async function handler(req, res) {
+  // Set response headers
+  res.setHeader('Content-Type', 'application/json');
 
-export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -90,7 +88,7 @@ export default async function handler(req, res) {
 
     const media = {
       mimeType: 'application/pdf',
-      body: require('stream').Readable.from(fileBuffer),
+      body: stream.Readable.from(fileBuffer),
     };
 
     const file = await drive.files.create({
@@ -123,4 +121,4 @@ export default async function handler(req, res) {
       stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
     });
   }
-}
+};
