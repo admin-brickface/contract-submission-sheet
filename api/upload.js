@@ -1,4 +1,4 @@
-const { google } = require('googleapis');
+aconst { google } = require('googleapis');
 const { IncomingForm } = require('formidable');
 const fs = require('fs');
 
@@ -45,6 +45,15 @@ export default async function handler(req, res) {
       });
     }
 
+    // Verify folder ID is set
+    if (!process.env.GOOGLE_DRIVE_FOLDER_ID) {
+      console.error('Missing folder ID');
+      return res.status(500).json({
+        error: 'Server configuration error: Missing Google Drive Folder ID',
+        details: 'Please configure GOOGLE_DRIVE_FOLDER_ID in Vercel environment variables'
+      });
+    }
+
     // Set up Google Drive API authentication
     const auth = new google.auth.GoogleAuth({
       credentials: {
@@ -56,18 +65,28 @@ export default async function handler(req, res) {
 
     const drive = google.drive({ version: 'v3', auth });
 
+    // Verify access to the folder
+    try {
+      await drive.files.get({
+        fileId: process.env.GOOGLE_DRIVE_FOLDER_ID,
+        fields: 'id, name',
+      });
+    } catch (folderError) {
+      console.error('Cannot access folder:', folderError);
+      return res.status(500).json({
+        error: 'Cannot access Google Drive folder',
+        details: `The service account cannot access the folder. Please verify: 1) The folder ID is correct, 2) The folder is shared with ${process.env.GOOGLE_CLIENT_EMAIL} with Editor permissions`
+      });
+    }
+
     // Read the file
     const fileBuffer = fs.readFileSync(pdfFile.filepath);
 
     // Upload to Google Drive
     const fileMetadata = {
       name: pdfFile.originalFilename || 'contract_submission.pdf',
+      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
     };
-
-    // Only add parents if folder ID is provided
-    if (process.env.GOOGLE_DRIVE_FOLDER_ID) {
-      fileMetadata.parents = [process.env.GOOGLE_DRIVE_FOLDER_ID];
-    }
 
     const media = {
       mimeType: 'application/pdf',
