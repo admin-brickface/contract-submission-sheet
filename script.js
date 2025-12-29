@@ -121,19 +121,33 @@ async function generatePDF() {
     const imgWidth = pageWidth - 20; // 10mm margin on each side
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let heightLeft = imgHeight;
-    let position = 10; // 10mm top margin
+    const margin = 10;
+    const usablePageHeight = pageHeight - (2 * margin);
 
-    // Add first page
-    doc.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight, undefined, 'FAST');
-    heightLeft -= (pageHeight - 20); // Account for margins
+    let yOffset = 0;
 
-    // Add more pages if content exceeds one page
-    while (heightLeft > 0) {
-        position = heightLeft - imgHeight + 10; // 10mm top margin for new page
-        doc.addPage();
-        doc.addImage(imgData, 'JPEG', 10, position, imgWidth, imgHeight, undefined, 'FAST');
-        heightLeft -= (pageHeight - 20);
+    // Add pages
+    while (yOffset < imgHeight) {
+        if (yOffset > 0) {
+            doc.addPage();
+        }
+
+        const sourceY = yOffset;
+        const sourceHeight = Math.min(usablePageHeight, imgHeight - yOffset);
+
+        // Use cropping to show only the portion that fits on this page
+        doc.addImage(
+            imgData,
+            'JPEG',
+            margin,
+            margin - yOffset,
+            imgWidth,
+            imgHeight,
+            undefined,
+            'FAST'
+        );
+
+        yOffset += usablePageHeight;
     }
 
     return doc.output('blob');
