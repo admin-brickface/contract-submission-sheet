@@ -108,6 +108,7 @@ async function generatePDF() {
     });
 
     // Create PDF from canvas
+    const { jsPDF } = window.jspdf;
     const imgData = canvas.toDataURL('image/png');
     const doc = new jsPDF('p', 'mm', 'a4');
 
