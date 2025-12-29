@@ -35,47 +35,26 @@ module.exports = async function handler(req, res) {
     }
 
     // Verify environment variables are set
-    if (!process.env.GOOGLE_CLIENT_EMAIL || !process.env.GOOGLE_PRIVATE_KEY) {
+    if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET || !process.env.GOOGLE_REFRESH_TOKEN) {
       console.error('Missing Google credentials');
       return res.status(500).json({
         error: 'Server configuration error: Missing Google Drive credentials',
-        details: 'Please configure GOOGLE_CLIENT_EMAIL and GOOGLE_PRIVATE_KEY in Vercel environment variables'
+        details: 'Please configure GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, and GOOGLE_REFRESH_TOKEN in Vercel environment variables'
       });
     }
 
-    // Verify folder ID is set
-    if (!process.env.GOOGLE_DRIVE_FOLDER_ID) {
-      console.error('Missing folder ID');
-      return res.status(500).json({
-        error: 'Server configuration error: Missing Google Drive Folder ID',
-        details: 'Please configure GOOGLE_DRIVE_FOLDER_ID in Vercel environment variables'
-      });
-    }
+    // Set up Google Drive API authentication with OAuth2
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET,
+      'https://developers.google.com/oauthplayground' // redirect URL
+    );
 
-    // Set up Google Drive API authentication
-    const auth = new google.auth.GoogleAuth({
-      credentials: {
-        client_email: process.env.GOOGLE_CLIENT_EMAIL,
-        private_key: process.env.GOOGLE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      },
-      scopes: ['https://www.googleapis.com/auth/drive.file'],
+    oauth2Client.setCredentials({
+      refresh_token: process.env.GOOGLE_REFRESH_TOKEN,
     });
 
-    const drive = google.drive({ version: 'v3', auth });
-
-    // Verify access to the folder
-    try {
-      await drive.files.get({
-        fileId: process.env.GOOGLE_DRIVE_FOLDER_ID,
-        fields: 'id, name',
-      });
-    } catch (folderError) {
-      console.error('Cannot access folder:', folderError);
-      return res.status(500).json({
-        error: 'Cannot access Google Drive folder',
-        details: `The service account cannot access the folder. Please verify: 1) The folder ID is correct, 2) The folder is shared with ${process.env.GOOGLE_CLIENT_EMAIL} with Editor permissions`
-      });
-    }
+    const drive = google.drive({ version: 'v3', auth: oauth2Client });
 
     // Read the file
     const fileBuffer = fs.readFileSync(pdfFile.filepath);
@@ -83,8 +62,12 @@ module.exports = async function handler(req, res) {
     // Upload to Google Drive
     const fileMetadata = {
       name: pdfFile.originalFilename || 'contract_submission.pdf',
-      parents: [process.env.GOOGLE_DRIVE_FOLDER_ID],
     };
+
+    // Only add parents if folder ID is provided
+    if (process.env.GOOGLE_DRIVE_FOLDER_ID) {
+      fileMetadata.parents = [process.env.GOOGLE_DRIVE_FOLDER_ID];
+    }
 
     const media = {
       mimeType: 'application/pdf',
